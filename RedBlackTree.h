@@ -1,6 +1,9 @@
 #pragma once
 
 #include <map>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 
 using namespace std;
@@ -18,6 +21,11 @@ public:
     void addData(const string& county, const string& date, const WeatherData& data);
     WeatherData getData(const string& county, const string& date) const;
 
+    // Tree Builder
+    void buildTree();
+
 private:
     map<pair<string, string>, WeatherData> weatherMap;
+
+    bool isDouble(const string& str); // buildTree helper function
 };
