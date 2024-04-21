@@ -6,12 +6,9 @@
 #include <sstream>
 #include <string>
 
-using namespace std;
+#include "WeatherData.h"
 
-struct WeatherData {
-    double precipitation;
-    double temperature;
-};
+using namespace std;
 
 class RedBlackTree {
 public:
