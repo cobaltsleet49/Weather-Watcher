@@ -6,12 +6,18 @@
 
 using namespace std;
 
+bool isDouble(const string& str) { // Checks if the current token can be converted to a double or not
+    stringstream ss(str);
+    double d;
+    ss >> d;
+    return !ss.fail() && ss.eof();
+}
+
 int main() {
     RedBlackTree test;
 
-    // NOAA only published data for January, February, and March
-    for (int year = 2023; year <= 2024; year++) {
-        for (int month = 1; month <= 3; month++) {
+    for (int year = 2021; year <= 2023; year++) {
+        for (int month = 1; month <= 12; month++) {
             stringstream date;
             date << year << "-" << month;
             string stringDate = date.str();
@@ -39,37 +45,45 @@ int main() {
                 getline(temp, line2);
             }
 
-            stringstream ss1(line1);
-            string token1; // Use token to iterate through each line
+            // Iterate for the 3107 counties
+            for (int i = 0; i < 3107; i++) {
+                stringstream ss1(line1);
+                string token1; // Use token to iterate through each line for precip
+                stringstream ss2(line2);
+                string token2; // Use token to iterate through each line for temp
 
-            // Skip to the county name
-            getline(ss1, token1, ',');
+                // Skip to the county name
+                getline(ss1, token1, ',');
+                // Extract the county name
+                getline(ss1, county, ',');
+                // Skip to the value
+                getline(ss1, token1, ',');
 
-            // Extract the county name
-            getline(ss1, county, ',');
+                // Extract the value
+                while (!isDouble(token1)) { // Edge Case for Washington, D.C.
+                    getline(ss1, token1, ',');
+                }
+                precipitation = stod(token1);
 
-            // Skip to the value
-            getline(ss1, token1, ',');
+                // Repeat for the temperature
+                for (int i = 0; i < 4; i++) {
+                    getline(ss2, token2, ',');
+                }
+                while (!isDouble(token2)) { // Edge Case for Washington, D.C.
+                    getline(ss1, token2, ',');
+                }
+                temperature = stod(token2);
 
-            // Extract the value
-            getline(ss1, token1, ',');
-            precipitation = stod(token1);
+                test.addData(county, stringDate, {precipitation, temperature});
 
-            // Repeat for the temperature
-            stringstream ss2(line2);
-            string token2; // Use token to iterate through each line
+                WeatherData testvals = test.getData(county, stringDate);
+                cout << testvals.precipitation << endl;
+                cout << testvals.temperature << endl;
 
-            for (int i = 0; i < 4; i++) {
-                getline(ss2, token2, ',');
+                // Move to the next lines for both files
+                getline(precip, line1);
+                getline(temp, line2);
             }
-            temperature = stod(token2);
-
-            test.addData(county, stringDate, {precipitation, temperature});
-
-            WeatherData testvals = test.getData(county, stringDate);
-            cout << testvals.precipitation << endl;
-            cout << testvals.temperature << endl;
-
         }
     }
 

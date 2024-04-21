@@ -6,8 +6,8 @@
 using namespace std;
 
 struct WeatherData {
-    double temperature;
     double precipitation;
+    double temperature;
 };
 
 class RedBlackTree {
