@@ -1,11 +1,11 @@
-#include <chrono>
-#include <iomanip>
+#include <chrono> // Used for timing
+#include <iomanip> // Used to get a certain number of decimal places
 
 #include "RedBlackTree.h"
 #include "HashTable.h"
 
 // You can add more data sets at https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/county/mapping
-// Format for the .csv files is "Year-Month-P/T", where P stands for precipitation and T for average temperature
+// Format for the .csv files is "Year-MonthP/T", where P stands for precipitation and T for average temperature
 
 using namespace std;
 
@@ -92,11 +92,12 @@ int main() {
                     start = chrono::high_resolution_clock::now(); // Start the timer for the search
 
                     if (dataStructure == 0) {
-                        WeatherData treeData = tree.getData(county, stringDate);// Search the tree
+                        WeatherData treeData = tree.getData({county, stringDate}); // Search the tree
+                        // WeatherData treeData = tree.getData(county, stringDate); // std::map implementation
 
                         end = chrono::high_resolution_clock::now(); // Stop the timer
                         duration = end - start;
-                        cout << "Time taken to search the Red-Black Tree: " << duration.count() << " seconds" << endl;
+                        cout << "Time taken to search the Red-Black Tree: " << fixed << setprecision(10) << duration.count() << " seconds" << endl;
 
                         if (treeData.precipitation == -1.0) {
                             cout << "Sorry, we could not find the county/date you were looking for. Please try again.\n";
@@ -104,10 +105,10 @@ int main() {
                         }
                         else {
                             if (menuInput == 1) {
-                                cout << "\nThe precipitation for " << county << " on " << stringDate << " was " << fixed << setprecision(2)<< treeData.precipitation << " inches.\n";
+                                cout << "\nThe precipitation for " << county << " on " << stringDate << " was " << fixed << setprecision(2) << treeData.precipitation << " inches.\n";
                             }
                             if (menuInput == 2) {
-                                cout << "\nThe average temperature for " << county << " on " << stringDate << " was " << fixed << setprecision(2) << treeData.precipitation << " degrees Fahrenheit.\n";
+                                cout << "\nThe average temperature for " << county << " on " << stringDate << " was " << fixed << setprecision(2) << treeData.temperature << " degrees Fahrenheit.\n";
                             }
                         }
                     }
@@ -117,7 +118,7 @@ int main() {
 
                         end = chrono::high_resolution_clock::now(); // Stop the timer
                         duration = end - start;
-                        cout << "Time taken to search the Hash Table: " << duration.count() << " seconds" << endl;
+                        cout << "Time taken to search the Hash Table: " << fixed << setprecision(10) << duration.count() << " seconds" << endl;
 
                         if (tableData.precipitation == -1.0) {
                             cout << "Sorry, we could not find the county/date you were looking for. Please try again.\n";
